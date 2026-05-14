@@ -20,7 +20,7 @@ export function createdResponse<T>(data: T, message = 'Created successfully') {
 
 export function errorResponse(error: unknown) {
   if (error instanceof ZodError) {
-    const messages = error.errors.map((e) => `${e.path.join('.')}: ${e.message}`).join(', ');
+    const messages = error.issues.map((e) => `${e.path.join('.')}: ${e.message}`).join(', ');
     return NextResponse.json({ success: false, error: messages }, { status: 422 });
   }
   if (error instanceof ApiError) {

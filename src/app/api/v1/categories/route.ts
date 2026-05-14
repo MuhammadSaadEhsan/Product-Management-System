@@ -8,7 +8,7 @@ const categoryRepo = getCategoryRepo();
 
 export async function GET() {
   try {
-    const categories = await categoryRepo.findAll({ isActive: true }, { sort: { name: 1 } });
+    const categories = await categoryRepo.find({ isActive: true }, { sort: { name: 1 } });
     return successResponse(categories);
   } catch (error) {
     return errorResponse(error);

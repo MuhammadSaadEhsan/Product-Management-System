@@ -18,10 +18,16 @@ export async function GET(req: NextRequest) {
         { phone: { $regex: search, $options: 'i' } },
       ];
     }
-    const result = await customerRepo.findPaginated(filter, { page, limit, sort: { name: 1 } });
-    return successResponse(result.data, 'Customers fetched', {
-      page: result.page, limit: result.limit, total: result.total,
-      totalPages: result.totalPages, hasNext: result.hasNext, hasPrev: result.hasPrev,
+    const { data, total } = await customerRepo.paginate(filter, { page, limit, sort: { name: 1 } });
+    const totalPages = Math.ceil(total / limit);
+    
+    return successResponse(data, 'Customers fetched', {
+      page, 
+      limit, 
+      total,
+      totalPages, 
+      hasNext: page < totalPages, 
+      hasPrev: page > 1,
     });
   } catch (error) {
     return errorResponse(error);
